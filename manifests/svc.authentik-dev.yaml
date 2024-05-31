@@ -55,7 +55,6 @@ spec:
     - name: tcp-postgresql
       port: 5432
       targetPort: tcp-postgresql
-      nodePort: 5432
   selector:
     app.kubernetes.io/instance: authentik
     app.kubernetes.io/name: postgresql
@@ -105,7 +104,6 @@ spec:
     - name: tcp-redis
       port: 6379
       targetPort: redis
-      nodePort: 6379
   selector:
     app.kubernetes.io/instance: authentik
     app.kubernetes.io/name: redis
