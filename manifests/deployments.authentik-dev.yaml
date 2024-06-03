@@ -102,6 +102,15 @@ spec:
             successThreshold: 1
             timeoutSeconds: 1
           resources: {}
+          dnsPolicy: None
+          dnsConfig:
+            nameservers:
+              - 10.0.0.230
+            searches:
+              - diagon.ally
+            options:
+              - name: ndots
+                value: "5"
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -203,6 +212,15 @@ spec:
             successThreshold: 1
             timeoutSeconds: 1
           resources: {}
+          dnsPolicy: None
+          dnsConfig:
+            nameservers:
+              - 10.0.0.230
+            searches:
+              - diagon.ally
+            options:
+              - name: ndots
+                value: "5"          
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
