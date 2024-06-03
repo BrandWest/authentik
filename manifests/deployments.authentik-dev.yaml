@@ -102,15 +102,15 @@ spec:
             successThreshold: 1
             timeoutSeconds: 1
           resources: {}
-          dnsPolicy: None
-          dnsConfig:
-            nameservers:
-              - 10.0.0.230
-            searches:
-              - diagon.ally
-            options:
-              - name: ndots
-                value: "5"
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.0.0.230
+        searches:
+          - diagon.ally
+        options:
+          - name: ndots
+            value: "2"
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -179,7 +179,6 @@ spec:
             - secretRef:
                 name: cloudflare-api-token-secret
           livenessProbe:
-            
             exec:
               command:
               - ak
@@ -212,15 +211,15 @@ spec:
             successThreshold: 1
             timeoutSeconds: 1
           resources: {}
-          dnsPolicy: None
-          dnsConfig:
-            nameservers:
-              - 10.0.0.230
-            searches:
-              - diagon.ally
-            options:
-              - name: ndots
-                value: "5"          
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.0.0.230
+        searches:
+          - diagon.ally
+        options:
+          - name: ndots
+            value: "2"          
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
