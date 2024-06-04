@@ -215,6 +215,17 @@ spec:
         fsGroup: 1001
       serviceAccountName: authentik-redis
       automountServiceAccountToken: true
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: authentik
+                    app.kubernetes.io/name: redis
+                    app.kubernetes.io/component: master
+                topologyKey: kubernetes.io/hostname
+              weight: 1
       enableServiceLinks: true
       terminationGracePeriodSeconds: 30
       containers:
@@ -242,16 +253,11 @@ spec:
             - name: REDIS_REPLICATION_MODE
               value: master
             - name: ALLOW_EMPTY_PASSWORD
-              value: "no"
+              value: "yes"
             - name: REDIS_TLS_ENABLED
               value: "no"
             - name: REDIS_PORT
               value: "6379"
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: authentik-redis
-                  key: AUTHENTIK_REDIS__PASSWORD
           ports:
             - name: redis
               containerPort: 6379
@@ -324,4 +330,4 @@ spec:
           - "ReadWriteOnce"
         resources:
           requests:
-            storage: "8Gi"
+            storage: "1Gi"
