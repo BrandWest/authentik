@@ -1,5 +1,3 @@
-
----
 # Source: authentik/charts/postgresql/templates/primary/extended-configmap.yaml
 apiVersion: v1
 kind: ConfigMap
