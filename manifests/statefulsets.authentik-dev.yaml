@@ -170,7 +170,7 @@ spec:
           - "ReadWriteOnce"
         resources:
           requests:
-            storage: "8Gi"
+            storage: "1Gi"
 ---
 # Source: authentik/charts/redis/templates/master/application.yaml
 apiVersion: apps/v1
@@ -215,7 +215,7 @@ spec:
         fsGroup: 1001
       serviceAccountName: authentik-redis
       automountServiceAccountToken: true
-      affinity:
+      affinity:          
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - podAffinityTerm:
