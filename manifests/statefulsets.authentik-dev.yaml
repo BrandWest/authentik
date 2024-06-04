@@ -242,11 +242,16 @@ spec:
             - name: REDIS_REPLICATION_MODE
               value: master
             - name: ALLOW_EMPTY_PASSWORD
-              value: "yes"
+              value: "no"
             - name: REDIS_TLS_ENABLED
               value: "no"
             - name: REDIS_PORT
               value: "6379"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: authentik-redis
+                  key: AUTHENTIK_REDIS__PASSWORD
           ports:
             - name: redis
               containerPort: 6379
