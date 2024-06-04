@@ -24,4 +24,4 @@ spec:
           # kubectl create secret generic cloudflare-api-key-secret
           apiTokenSecretRef:
             name: cloudflare-api-token-secret
-            key: password
+            key: api-token
