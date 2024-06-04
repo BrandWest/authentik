@@ -114,9 +114,9 @@ spec:
           - svc.cluster.local
           - cluster.local
           - diagon.ally
-        options:
-          - name: ndots
-            value: "2"
+        # options:
+        #   - name: ndots
+        #     value: "2"
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
