@@ -263,6 +263,9 @@ spec:
               value: "no"
             - name: REDIS_PORT
               value: "6379"
+          envFrom:
+            - secretRef:
+                name: authentik-redis            
           ports:
             - name: redis
               containerPort: 6379
