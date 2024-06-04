@@ -104,16 +104,16 @@ spec:
             successThreshold: 1
             timeoutSeconds: 1
           resources: {}
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.0.0.230
-          - 10.43.0.10 # This may need to change in the future
-        searches:
-          - authentik-dev.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
-          - diagon.ally
+      # dnsPolicy: None
+      # dnsConfig:
+      #   nameservers:
+      #     - 10.0.0.230
+      #     - 10.43.0.10 # This may need to change in the future
+      #   searches:
+      #     - authentik-dev.svc.cluster.local
+      #     - svc.cluster.local
+      #     - cluster.local
+      #     - diagon.ally
         # options:
         #   - name: ndots
         #     value: "2"
