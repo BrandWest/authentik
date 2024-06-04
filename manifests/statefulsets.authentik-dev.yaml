@@ -207,15 +207,15 @@ spec:
       annotations:
         checksum/configmap: 86bcc953bb473748a3d3dc60b7c11f34e60c93519234d4c37f42e22ada559d47
         checksum/health: aff24913d801436ea469d8d374b2ddb3ec4c43ee7ab24663d5f8ff1a1b6991a9
-        checksum/scripts: 43cdf68c28f3abe25ce017a82f74dbf2437d1900fd69df51a55a3edf6193d141
-        checksum/secret: 44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
+        checksum/scripts: 560c33ff34d845009b51830c332aa05fa211444d1877d3526d3599be7543aaa5
+        checksum/secret: f07951c218d231a94c0748093a1c70750a3339ddbe8adc899ad4237fd6c1e926
     spec:
       
       securityContext:
         fsGroup: 1001
       serviceAccountName: authentik-redis
       automountServiceAccountToken: true
-      affinity:          
+      affinity:   
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - podAffinityTerm:
@@ -225,7 +225,7 @@ spec:
                     app.kubernetes.io/name: redis
                     app.kubernetes.io/component: master
                 topologyKey: kubernetes.io/hostname
-              weight: 1
+              weight: 1          
       enableServiceLinks: true
       terminationGracePeriodSeconds: 30
       containers:
@@ -253,7 +253,12 @@ spec:
             - name: REDIS_REPLICATION_MODE
               value: master
             - name: ALLOW_EMPTY_PASSWORD
-              value: "yes"
+              value: "no"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: authentik-redis
+                  key: redis-password
             - name: REDIS_TLS_ENABLED
               value: "no"
             - name: REDIS_PORT
