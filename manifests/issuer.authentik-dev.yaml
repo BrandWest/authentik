@@ -7,9 +7,7 @@ spec:
     # The ACME server URL
     server: https://acme-v02.api.letsencrypt.org/directory
     # Email address used for ACME registration
-    emailSecretRef:
-      name: cloudflare-api-token-secret
-      key: email
+    email: <path:argocd/data/argocd-vault-plugin/cloudflare#email> 
     # Name of a secret used to store the ACME account private key
     privateKeySecretRef:
       name: authentik-letsencrypt-dev
@@ -21,13 +19,9 @@ spec:
         - authentik-dev.diagon.cloud
       dns01:
         cloudflare:
-          emailSecretRef:
-            name: cloudflare-api-key-secret
-            key: email
+          email: <path:argocd/data/argocd-vault-plugin/cloudflare#email> 
           # !! Remember to create a k8s secret before
           # kubectl create secret generic cloudflare-api-key-secret
           apiTokenSecretRef:
             name: cloudflare-api-token-secret
             key: password
-
-
