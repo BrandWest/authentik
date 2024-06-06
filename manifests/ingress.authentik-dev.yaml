@@ -28,7 +28,7 @@ spec:
               service:
                 name: authentik-server
                 port:
-                  number: 443
+                  number: 80
   tls:
     - hosts:
       - authentik-dev.diagon.cloud
