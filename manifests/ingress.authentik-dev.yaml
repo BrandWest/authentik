@@ -19,7 +19,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: authtentik-dev.diagon.cloud
+    - host: authentik-dev.diagon.cloud
       http:
         paths:
           - path: /
