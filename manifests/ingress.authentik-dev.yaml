@@ -14,7 +14,7 @@ metadata:
     app.kubernetes.io/version: "2024.4.2"
   annotations:
     cert-manager.io/issuer: authentik-letsencrypt-dev
-    nginx.org/websocket-services: "authentik"
+    nginx.org/websocket-services: "authentik-server"
     nginx.ingress.kubernetes.io/server-snippet: |
       # Upstream where your authentik server is hosted.
       upstream authentik {
