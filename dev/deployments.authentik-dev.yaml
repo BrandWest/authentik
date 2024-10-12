@@ -1,0 +1,218 @@
+
+---
+# Source: authentik/templates/server/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authentik-server
+  namespace: "authentik-dev"
+  labels:
+    helm.sh/chart: "authentik-2024.4.2"
+    app.kubernetes.io/name: "authentik"
+    app.kubernetes.io/instance: "authentik"
+    app.kubernetes.io/component: "server"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/part-of: "authentik"
+    app.kubernetes.io/version: "2024.4.2"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "authentik"
+      app.kubernetes.io/instance: "authentik"
+      app.kubernetes.io/component: "server"
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: "authentik-2024.4.2"
+        app.kubernetes.io/name: "authentik"
+        app.kubernetes.io/instance: "authentik"
+        app.kubernetes.io/component: "server"
+        app.kubernetes.io/managed-by: "Helm"
+        app.kubernetes.io/part-of: "authentik"
+        app.kubernetes.io/version: "2024.4.2"
+      annotations:
+        checksum/secret: b4330e7dac165282efcff3efb85639a56281dec01b383cada21fd15b65525b84
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: server
+          image: ghcr.io/goauthentik/server:2024.4.2
+          imagePullPolicy: IfNotPresent
+          args:
+            - server
+          env:
+            - name: AUTHENTIK_LISTEN__HTTP
+              value: "0.0.0.0:9000"
+            - name: AUTHENTIK_LISTEN__HTTPS
+              value: "0.0.0.0:9443"
+            - name: AUTHENTIK_LISTEN__METRICS
+              value: "0.0.0.0:9300"
+            - name: AUTHENTIK_REDIS__HOST
+              value: authentik-redis-master            
+          envFrom:
+            - secretRef:
+                name: authentik-data
+            - secretRef:
+                name: authentik-smtp
+            - secretRef:
+                name: authentik-postgresql
+            - secretRef:
+                name: authentik-redis
+            - secretRef:
+                name: cloudflare-api-token-secret
+
+          ports:
+            - name: http
+              containerPort: 9000
+              protocol: TCP
+            - name: https
+              containerPort: 9443
+              protocol: TCP
+            - name: metrics
+              containerPort: 9300
+              protocol: TCP
+          livenessProbe:
+            
+            failureThreshold: 3
+            httpGet:
+              path: /-/health/live/
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            
+            failureThreshold: 3
+            httpGet:
+              path: /-/health/ready/
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          startupProbe:
+            
+            failureThreshold: 60
+            httpGet:
+              path: /-/health/live/
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: "authentik"
+                    app.kubernetes.io/instance: "authentik"
+                    app.kubernetes.io/component: "server"
+                topologyKey: kubernetes.io/hostname
+      enableServiceLinks: true
+---
+# Source: authentik/templates/worker/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authentik-worker
+  namespace: "authentik-dev"
+  labels:
+    helm.sh/chart: "authentik-2024.4.2"
+    app.kubernetes.io/name: "authentik"
+    app.kubernetes.io/instance: "authentik"
+    app.kubernetes.io/component: "worker"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/part-of: "authentik"
+    app.kubernetes.io/version: "2024.4.2"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "authentik"
+      app.kubernetes.io/instance: "authentik"
+      app.kubernetes.io/component: "worker"
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: "authentik-2024.4.2"
+        app.kubernetes.io/name: "authentik"
+        app.kubernetes.io/instance: "authentik"
+        app.kubernetes.io/component: "worker"
+        app.kubernetes.io/managed-by: "Helm"
+        app.kubernetes.io/part-of: "authentik"
+        app.kubernetes.io/version: "2024.4.2"
+      annotations:
+        checksum/secret: b4330e7dac165282efcff3efb85639a56281dec01b383cada21fd15b65525b84
+    spec:
+      serviceAccountName: authentik
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: worker
+          image: ghcr.io/goauthentik/server:2024.4.2
+          imagePullPolicy: IfNotPresent
+          args:
+            - worker
+          envFrom:
+            - secretRef:
+                name: authentik-data
+            - secretRef:
+                name: authentik-smtp
+            - secretRef:
+                name: authentik-postgresql
+            - secretRef:
+                name: authentik-redis
+            - secretRef:
+                name: cloudflare-api-token-secret
+          livenessProbe:
+            exec:
+              command:
+              - ak
+              - healthcheck
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            
+            exec:
+              command:
+              - ak
+              - healthcheck
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          startupProbe:
+            
+            exec:
+              command:
+              - ak
+              - healthcheck
+            failureThreshold: 60
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}    
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: "authentik"
+                    app.kubernetes.io/instance: "authentik"
+                    app.kubernetes.io/component: "worker"
+                topologyKey: kubernetes.io/hostname
+      enableServiceLinks: true
