@@ -1,7 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: authentik-letsencrypt-dev
+  name: authentik-letsencrypt
 spec:
   acme:
     # The ACME server URL
@@ -10,7 +10,7 @@ spec:
     email: <path:argocd/data/argocd-vault-plugin/cloudflare#email> 
     # Name of a secret used to store the ACME account private key
     privateKeySecretRef:
-      name: authentik-letsencrypt-dev
+      name: authentik-letsencrypt
     # ACME DNS-01 provider configurations
     solvers:
     # An empty 'selector' means that this solver matches all domains

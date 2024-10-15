@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/part-of: "authentik"
     app.kubernetes.io/version: "2024.4.2"
   annotations:
-    cert-manager.io/issuer: authentik-letsencrypt-dev
+    cert-manager.io/issuer: authentik-letsencrypt
     nginx.org/websocket-services: "authentik-server"
     nginx.ingress.kubernetes.io/server-snippet: |
       # Upstream where your authentik server is hosted.
@@ -59,7 +59,7 @@ metadata:
               proxy_set_header Connection $connection_upgrade_keepalive;
           }
       }
-      }            
+      }          
 spec:
   ingressClassName: nginx
   rules:
